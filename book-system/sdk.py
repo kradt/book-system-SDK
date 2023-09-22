@@ -35,6 +35,33 @@ class BookSystemSDK:
             request = requests.patch(url, data=body, headers=headers)        
         return request
     
+    def _get(self, url: str) -> dict:
+        response = self._make_request(base_url=url, method="GET")
+        json = response.json()
+        if response.status_code != 200:
+            raise ValueError(json["detail"])
+        return json
+    
+    def _delete(self, url: str) -> None:
+        response = self._make_request(base_url=url, method="DELETE")
+        if response.status_codes != 204:
+            json = response.json()
+            raise ValueError(json["detail"])
+        
+    def _craete_(self, url: str, body: dict):
+        response = self._make_request(base_url=url, method="POST", body=body)
+        json = response.json()
+        if response.status_code != 201:
+            raise ValueError(json["detail"])
+        return json
+
+    def _refresh(self, url: str, body: dict):
+        response = self._make_request(base_url=url, method="PATCH", body=body)
+        json = response.json()
+        if response.status_code != 200:
+            raise ValueError(json["detail"])
+        return json
+    
     @property
     def rooms(self) -> list[Room]:
         if not self._rooms:
@@ -48,19 +75,6 @@ class BookSystemSDK:
             url = f"{self.api_url}/events/"
             self._events = [Event.from_json(event) for event in self._get(url)]
         return self._events
-    
-    def _get(self, url: str) -> dict:
-        response = self._make_request(base_url=url, method="GET")
-        json = response.json()
-        if response.status_code != 200:
-            raise ValueError(json["detail"])
-        return json
-    
-    def _delete(self, url: str) -> None:
-        response = self._make_request(base_url=url, method="DELETE")
-        if requests.status_codes != 204:
-            json = response.json()
-            raise ValueError(json["detail"])
 
     def get_room_by_id(self, room_id) -> Room:
         url = f"{self.api_url}/rooms/{room_id}/"
@@ -77,13 +91,22 @@ class BookSystemSDK:
         json = self._get(url)
         return Booking.from_json(json)
 
-    def create_room(self, room: Room) -> Room:
+    def add_room(self, room: Room) -> Room:
         pass
 
-    def crete_event(self, event: Event) -> Event:
+    def add_event(self, event: Event) -> Event:
         pass
 
-    def create_booking(self, booking: Booking) -> Booking:
+    def add_booking(self, booking: Booking) -> Booking:
+        pass
+
+    def refresh_room(self, room: Room) -> Room:
+        pass
+
+    def refresh_event(self, room: Room) -> Event:
+        pass
+
+    def refresh_booking(self, room: Room) -> Booking:
         pass
 
     def delete_room_by_id(self, room_id: int) -> None:
