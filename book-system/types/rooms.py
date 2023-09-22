@@ -1,8 +1,9 @@
 from .booking import Booking
 from .seats import Seat
+from types import TypeModel
 
 
-class Room:
+class Room(TypeModel):
     def __init__(
             self, 
             title: str | None = None, 
@@ -10,16 +11,15 @@ class Room:
             seats: list[Seat] | None = None,
             autogenerate_seats: bool = True,
             saved: bool = False):
-    
-        if autogenerate_seats:
-            seats = self._generate_seats()
+        
         self.title = title
         self.seat = seats
         self.schedule = schedule
+        self.autogenerate_seats = autogenerate_seats
         self.saved = saved
 
-    @staticmethod
-    def from_database(room: dict):
+    @classmethod
+    def from_database(cls, room: dict):
         """
             Getting room using json that we get from API
             TODO: add saved = True during adding it into the database
@@ -45,6 +45,3 @@ class Room:
         if self.saved:
             raise ValueError("The room already saved in the database")
         self.saved = True
-
-    def _generate_seats(self, columns, rows) -> list[Seat]:
-        pass

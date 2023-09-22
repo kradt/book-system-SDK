@@ -1,6 +1,7 @@
+from types import TypeModel
 
 
-class Seat:
+class Seat(TypeModel):
     def __init__(
             self,
             row: int,
@@ -18,8 +19,8 @@ class Seat:
         self.saved = saved
         self.room_id = room_id
 
-    @staticmethod
-    def from_database(self, seat: dict):
+    @classmethod
+    def from_database(cls, seat: dict):
         """
             Getting seat using json that we get from API
         """

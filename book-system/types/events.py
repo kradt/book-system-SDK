@@ -1,6 +1,7 @@
+from types import TypeModel
 
 
-class Event:
+class Event(TypeModel):
     def __init__(
             self,
             title: str,
@@ -10,7 +11,8 @@ class Event:
         self.additional_data = additional_data
         self.saved = saved
 
-    def from_database(self, event: dict):
+    @classmethod
+    def from_database(cls, event: dict):
         """
             Getting event using json that we get from API
         """
