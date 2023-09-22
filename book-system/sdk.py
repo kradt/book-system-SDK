@@ -16,30 +16,34 @@ class BookSystemSDK:
     @property
     def rooms(self) -> list[Room]:
         return self._rooms
-    
-    @rooms.setter
-    def rooms(self, rooms: list) -> None:
-        self._rooms = rooms
 
     @property
     def events(self) -> list[Event]:
         return self._events
     
-    @events.setter
-    def events(self, events) -> None:
-        self._events = events
-
-    def get_room_by_it_id(self, room_id):
+    def get_room_by_id(self, room_id) -> Room:
         pass
 
-    def get_event_by_it_id(self, event_id):
+    def get_event_by_id(self, event_id) -> Event:
         pass
 
-    def create_room(room: Room):
+    def get_booking_by_id(self, booking_id) -> Booking:
         pass
 
-    def crete_event(event: Event):
+    def create_room(room: Room) -> Room:
         pass
 
-    def create_booking(booking: Booking):
+    def crete_event(event: Event) -> Event:
+        pass
+
+    def create_booking(booking: Booking) -> Booking:
+        pass
+
+    def delete_room(room: Room) -> None:
+        pass
+
+    def delete_event(event: Event) -> None:
+        pass
+
+    def delete_booking(booking: Booking) -> None:
         pass

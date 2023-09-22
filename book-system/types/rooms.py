@@ -9,14 +9,11 @@ class Room(TypeModel):
             title: str | None = None, 
             schedule: list[Booking] | None = None,
             seats: list[Seat] | None = None,
-            autogenerate_seats: bool = True,
-            saved: bool = False):
-        
+            autogenerate_seats: bool = True):
         self.title = title
-        self.seat = seats
+        self.seats = seats
         self.schedule = schedule
         self.autogenerate_seats = autogenerate_seats
-        self.saved = saved
 
     @classmethod
     def from_database(cls, room: dict):
@@ -36,3 +33,12 @@ class Room(TypeModel):
         """
             Unbook current rooom at passed time
         """
+
+    def to_dict(self) -> dict:
+        seats_dict = [seat.to_dict() for seat in self.seats]
+        booking_dict = [booking.to_dict() for booking in self.booking]
+        return dict(
+            title=self.title, 
+            seats=seats_dict, 
+            scheduler=booking_dict
+        )

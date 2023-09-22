@@ -9,14 +9,12 @@ class Seat(TypeModel):
             number: int,
             booked: bool = False,
             additional_data: dict | None = None,
-            saved: bool = False,
             room_id: int | None = None):
         self.row = row
         self.column = column
         self.number = number
         self.booked = booked
         self.additional_data = additional_data
-        self.saved = saved
         self.room_id = room_id
 
     @classmethod
@@ -48,3 +46,14 @@ class Seat(TypeModel):
         """
         self.booked = False
         pass
+
+    def to_dict(self) -> dict:
+        return dict(
+            row=self.row,
+            column=self.column, 
+            number=self.number, 
+            booked=self.booked, 
+            additional_data=self.additional_data, 
+            room_id=self.sroom_id
+        )
+

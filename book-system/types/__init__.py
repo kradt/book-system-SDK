@@ -10,3 +10,7 @@ class TypeModel(ABC):
     @abstractmethod
     def save():
         raise NotImplementedError
+    
+    @abstractmethod
+    def to_dict():
+        raise NotImplementedError

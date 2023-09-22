@@ -5,11 +5,9 @@ class Event(TypeModel):
     def __init__(
             self,
             title: str,
-            additional_data: dict,
-            saved: bool = False):
+            additional_data: dict):
         self.title = title
         self.additional_data = additional_data
-        self.saved = saved
 
     @classmethod
     def from_database(cls, event: dict):
@@ -17,3 +15,6 @@ class Event(TypeModel):
             Getting event using json that we get from API
         """
         pass
+
+    def to_dict(self) -> dict:
+        return dict(title=self.title, additional_data=self.additional_data)
