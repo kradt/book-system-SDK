@@ -48,9 +48,3 @@ class Seat(TypeModel):
         """
         self.booked = False
         pass
-
-    def save(self):
-        """
-            Save Seat into the database
-        """
-        pass

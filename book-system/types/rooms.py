@@ -36,12 +36,3 @@ class Room(TypeModel):
         """
             Unbook current rooom at passed time
         """
-
-    def save(self):
-        """
-            Saving room into the database
-            TODO: functionallity
-        """
-        if self.saved:
-            raise ValueError("The room already saved in the database")
-        self.saved = True

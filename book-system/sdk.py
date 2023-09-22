@@ -1,5 +1,6 @@
 from types.rooms import Room
 from types.events import Event
+from types.booking import Booking
 
 
 class BookSystemSDK:
@@ -27,3 +28,18 @@ class BookSystemSDK:
     @events.setter
     def events(self, events) -> None:
         self._events = events
+
+    def get_room_by_it_id(self, room_id):
+        pass
+
+    def get_event_by_it_id(self, event_id):
+        pass
+
+    def create_room(room: Room):
+        pass
+
+    def crete_event(event: Event):
+        pass
+
+    def create_booking(booking: Booking):
+        pass

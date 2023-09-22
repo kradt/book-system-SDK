@@ -1,10 +1,11 @@
 import datetime
 
+from types import TypeModel
 from .events import Event
 from .rooms import Room
 
 
-class Booking:
+class Booking(TypeModel):
     def __init__(
             self, 
             event: Event,
@@ -15,10 +16,3 @@ class Booking:
         self.room = room
         self.time_from = time_from
         self.time_to = time_to
-
-
-    def save(self, booking: dict):
-        """
-            TODO: saving booking in the database
-        """
-        pass

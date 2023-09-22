@@ -17,12 +17,3 @@ class Event(TypeModel):
             Getting event using json that we get from API
         """
         pass
-
-    def save(self):
-        """
-            TODO: saving Event in the database
-        """
-        pass
-
-
-
