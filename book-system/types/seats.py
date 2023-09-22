@@ -10,6 +10,7 @@ class Seat(TypeModel):
             booked: bool = False,
             additional_data: dict | None = None,
             room_id: int | None = None):
+
         self.row = row
         self.column = column
         self.number = number
@@ -56,4 +57,3 @@ class Seat(TypeModel):
             additional_data=self.additional_data, 
             room_id=self.sroom_id
         )
-

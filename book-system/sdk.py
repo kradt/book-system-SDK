@@ -23,7 +23,7 @@ class BookSystemSDK:
             body: dict | None = None,
             headers: dict | None = None,
             queries: dict | None = None) -> requests.Response:
-        
+
         url = f"{base_url}?{urlencode(queries)}"
         if method == "GET":
             request = requests.get(url)
@@ -55,6 +55,12 @@ class BookSystemSDK:
         if response.status_code != 200:
             raise ValueError(json["detail"])
         return json
+    
+    def _delete(self, url: str) -> None:
+        response = self._make_request(base_url=url, method="DELETE")
+        if requests.status_codes != 204:
+            json = response.json()
+            raise ValueError(json["detail"])
 
     def get_room_by_id(self, room_id) -> Room:
         url = f"{self.api_url}/rooms/{room_id}/"
@@ -71,20 +77,23 @@ class BookSystemSDK:
         json = self._get(url)
         return Booking.from_json(json)
 
-    def create_room(room: Room) -> Room:
+    def create_room(self, room: Room) -> Room:
         pass
 
-    def crete_event(event: Event) -> Event:
+    def crete_event(self, event: Event) -> Event:
         pass
 
-    def create_booking(booking: Booking) -> Booking:
+    def create_booking(self, booking: Booking) -> Booking:
         pass
 
-    def delete_room(room: Room) -> None:
-        pass
+    def delete_room_by_id(self, room_id: int) -> None:
+        link = f"{self.api_url}/rooms/{room_id}"
+        self._delete(link)
 
-    def delete_event(event: Event) -> None:
-        pass
+    def delete_event_by_id(self, event_id: int) -> None:
+        link = f"{self.api_url}/events/{event_id}"
+        self._delete(link)
 
-    def delete_booking(booking: Booking) -> None:
-        pass
+    def delete_booking_by_id(self, booking_id: int) -> None:
+        link = f"{self.api_url}/booking/{booking_id}"
+        self._delete(link)
