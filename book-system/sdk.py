@@ -20,9 +20,9 @@ class BookSystemSDK:
     def _make_request(
             base_url: str,
             method: Literal["GET", "POST", "PATCH", "DELETE"] = "GET", 
-            headers: dict | None = None,
             body: dict | None = None,
-            queries: dict | None = None):
+            headers: dict | None = None,
+            queries: dict | None = None) -> requests.Response:
         
         url = f"{base_url}?{urlencode(queries)}"
         if method == "GET":
@@ -43,14 +43,26 @@ class BookSystemSDK:
     def events(self) -> list[Event]:
         return self._events
     
+
+    def _get(self, url: str) -> dict:
+        response = self._make_request(base_url=url, method="GET")
+        json = response.json()
+        if response.status_code != 200:
+            raise ValueError(json["detail"])
+        return json
+
     def get_room_by_id(self, room_id) -> Room:
-        pass
+        url = f"{self.api_url}/rooms/{room_id}/"
+        return self._get(url)
 
     def get_event_by_id(self, event_id) -> Event:
-        pass
+        url = f"{self.api_url}/events/{event_id}/"
+        return self._get(url)
 
     def get_booking_by_id(self, booking_id) -> Booking:
-        pass
+        url = f"{self.api_url}/rooms/{booking_id}/"
+        return self._get(url)
+
 
     def create_room(room: Room) -> Room:
         pass
