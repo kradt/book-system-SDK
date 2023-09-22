@@ -1,3 +1,7 @@
+import requests
+from urllib.parse import urlencode
+from typing import Literal
+
 from types.rooms import Room
 from types.events import Event
 from types.booking import Booking
@@ -13,6 +17,24 @@ class BookSystemSDK:
         self._rooms = rooms
         self.events = events
 
+    def _make_request(
+            base_url: str,
+            method: Literal["GET", "POST", "PATCH", "DELETE"] = "GET", 
+            headers: dict | None = None,
+            body: dict | None = None,
+            queries: dict | None = None):
+        
+        url = f"{base_url}?{urlencode(queries)}"
+        if method == "GET":
+            request = requests.get(url)
+        elif method == "POST":
+            request = requests.post(url, data=body, headers=headers)
+        elif method == "DELETE":
+            request = requests.delete(url, headers=headers)
+        elif method == "PATCH":
+            request = requests.patch(url, data=body, headers=headers)        
+        return request
+    
     @property
     def rooms(self) -> list[Room]:
         return self._rooms
