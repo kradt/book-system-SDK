@@ -101,13 +101,25 @@ class BookSystemSDK:
         pass
 
     def refresh_room(self, room: Room) -> Room:
-        pass
+        url = f"{self.api_url}/rooms/{room.id}"
+        room = room.to_dict()
+        body = dict(name=room["title"], seats=room["seats"])
+        return self._refresh(url, body=body)
 
-    def refresh_event(self, room: Room) -> Event:
-        pass
+    def refresh_event(self, event: Event) -> Event:
+        url = f"{self.api_url}/events/{event.id}"
+        event = event.to_dict()
+        return self._refresh(url, body=event)
 
-    def refresh_booking(self, room: Room) -> Booking:
-        pass
+    def refresh_booking(self, booking: Booking) -> Booking:
+        url = f"{self.api_url}/booking/{booking.id}"
+        booking = booking.to_dict()
+        body = dict(
+            time_start=booking["time_start"], 
+            time_finish=booking["time_finish"],
+            additional_data=booking["additional_data"]
+        )
+        return self._refresh(url, body=body)
 
     def delete_room_by_id(self, room_id: int) -> None:
         link = f"{self.api_url}/rooms/{room_id}"
