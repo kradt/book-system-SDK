@@ -37,13 +37,18 @@ class BookSystemSDK:
     
     @property
     def rooms(self) -> list[Room]:
+        if not self._rooms:
+            url = f"{self.api_url}/rooms/"
+            self._rooms = [Room.from_json(room) for room in self._get(url)]
         return self._rooms
 
     @property
     def events(self) -> list[Event]:
+        if not self._events:
+            url = f"{self.api_url}/events/"
+            self._events = [Event.from_json(event) for event in self._get(url)]
         return self._events
     
-
     def _get(self, url: str) -> dict:
         response = self._make_request(base_url=url, method="GET")
         json = response.json()
@@ -53,16 +58,18 @@ class BookSystemSDK:
 
     def get_room_by_id(self, room_id) -> Room:
         url = f"{self.api_url}/rooms/{room_id}/"
-        return self._get(url)
+        json = self._get(url)
+        return Room.from_json(json)
 
     def get_event_by_id(self, event_id) -> Event:
         url = f"{self.api_url}/events/{event_id}/"
-        return self._get(url)
+        json = self._get(url)
+        return Event.from_json(json)
 
     def get_booking_by_id(self, booking_id) -> Booking:
         url = f"{self.api_url}/rooms/{booking_id}/"
-        return self._get(url)
-
+        json = self._get(url)
+        return Booking.from_json(json)
 
     def create_room(room: Room) -> Room:
         pass
