@@ -16,3 +16,7 @@ class Booking(TypeModel):
         self.room = room
         self.time_from = time_from
         self.time_to = time_to
+
+    @classmethod
+    def from_json(cls, booking: dict):
+        pass

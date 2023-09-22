@@ -16,7 +16,7 @@ class Room(TypeModel):
         self.autogenerate_seats = autogenerate_seats
 
     @classmethod
-    def from_database(cls, room: dict):
+    def from_json(cls, room: dict):
         """
             Getting room using json that we get from API
             TODO: add saved = True during adding it into the database

@@ -18,7 +18,7 @@ class Seat(TypeModel):
         self.room_id = room_id
 
     @classmethod
-    def from_database(cls, seat: dict):
+    def from_json(cls, seat: dict):
         """
             Getting seat using json that we get from API
         """

@@ -10,7 +10,7 @@ class Event(TypeModel):
         self.additional_data = additional_data
 
     @classmethod
-    def from_database(cls, event: dict):
+    def from_json(cls, event: dict):
         """
             Getting event using json that we get from API
         """
