@@ -1,6 +1,6 @@
 import datetime
 
-from types import TypeModel
+from . import TypeModel
 from .events import Event
 from .rooms import Room
 

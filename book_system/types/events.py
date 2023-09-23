@@ -1,11 +1,12 @@
-from types import TypeModel
+from . import TypeModel
 
 
 class Event(TypeModel):
     def __init__(
             self,
             title: str,
-            additional_data: dict):
+            additional_data: dict | None = None):
+    
         self.title = title
         self.additional_data = additional_data
 
@@ -18,7 +19,7 @@ class Event(TypeModel):
                 "additional_data": "dict"
             }
         """
-        return super().__init__(title=event["title"], additional_data=event["additional_data"])
+        return cls(title=event["title"], additional_data=event["additional_data"])
 
     def to_dict(self) -> dict:
         return dict(title=self.title, additional_data=self.additional_data)

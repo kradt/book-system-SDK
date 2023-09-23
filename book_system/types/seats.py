@@ -1,4 +1,4 @@
-from types import TypeModel
+from . import TypeModel
 
 
 class Seat(TypeModel):
