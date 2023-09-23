@@ -15,7 +15,7 @@ class BookSystemSDK:
             events: list[Event] | None = None):
         self.api_url = api_url
         self._rooms = rooms
-        self.events = events
+        self._events = events
 
     def _make_request(
             base_url: str,
@@ -91,25 +91,31 @@ class BookSystemSDK:
         json = self._get(url)
         return Booking.from_json(json)
 
-    def add_room(self, room: Room) -> Room:
-        pass
+    def create_room(self, room: Room) -> Room:
+        url = f"{self.api_url}/rooms/"
+        body = room.to_dict()
+        return Room.from_json(self._craete_(url, body=body))
 
-    def add_event(self, event: Event) -> Event:
-        pass
+    def create_event(self, event: Event) -> Event:
+        url = f"{self.api_url}/events/"
+        body = event.to_dict()
+        return Event.from_json(self._craete_(url, body=body))
 
-    def add_booking(self, booking: Booking) -> Booking:
-        pass
+    def create_booking(self, booking: Booking) -> Booking:
+        url = f"{self.api_url}/booking/"
+        body = booking.to_dict()
+        return Booking.from_json(self._craete_(url, body=body))
 
     def refresh_room(self, room: Room) -> Room:
         url = f"{self.api_url}/rooms/{room.id}"
         room = room.to_dict()
         body = dict(name=room["title"], seats=room["seats"])
-        return self._refresh(url, body=body)
+        return Room.from_json(self._refresh(url, body=body))
 
     def refresh_event(self, event: Event) -> Event:
         url = f"{self.api_url}/events/{event.id}"
         event = event.to_dict()
-        return self._refresh(url, body=event)
+        return Event.from_json(self._refresh(url, body=event))
 
     def refresh_booking(self, booking: Booking) -> Booking:
         url = f"{self.api_url}/booking/{booking.id}"
@@ -119,16 +125,16 @@ class BookSystemSDK:
             time_finish=booking["time_finish"],
             additional_data=booking["additional_data"]
         )
-        return self._refresh(url, body=body)
+        return Booking.from_json(self._refresh(url, body=body))
 
     def delete_room_by_id(self, room_id: int) -> None:
-        link = f"{self.api_url}/rooms/{room_id}"
-        self._delete(link)
+        url = f"{self.api_url}/rooms/{room_id}"
+        self._delete(url)
 
     def delete_event_by_id(self, event_id: int) -> None:
-        link = f"{self.api_url}/events/{event_id}"
-        self._delete(link)
+        url = f"{self.api_url}/events/{event_id}"
+        self._delete(url)
 
     def delete_booking_by_id(self, booking_id: int) -> None:
-        link = f"{self.api_url}/booking/{booking_id}"
-        self._delete(link)
+        url = f"{self.api_url}/booking/{booking_id}"
+        self._delete(url)
