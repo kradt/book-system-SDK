@@ -9,8 +9,15 @@ class Room(TypeModel):
             name: str | None = None, 
             schedule: list[Booking] | None = None,
             seats: list[Seat] | None = None,
-            autogenerate_seats: bool = True):
+            autogenerate_seats: bool = False, 
+            columns: int | None = None,
+            rows: int | None = None):
+        
+        if autogenerate_seats and (not columns or not rows):
+            raise ValueError("If u wanna use autogenerate you should pass number of columns and rows")
         self.name = name
+        self.columns = columns
+        self.rows = rows
         self.seats = seats
         self.schedule = schedule
         self.autogenerate_seats = autogenerate_seats
