@@ -13,8 +13,12 @@ class Event(TypeModel):
     def from_json(cls, event: dict):
         """
             Getting event using json that we get from API
+            {
+                "title": "str",
+                "additional_data": "dict"
+            }
         """
-        pass
+        return super().__init__(title=event["title"], additional_data=event["additional_data"])
 
     def to_dict(self) -> dict:
         return dict(title=self.title, additional_data=self.additional_data)

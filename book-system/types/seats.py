@@ -23,7 +23,14 @@ class Seat(TypeModel):
         """
             Getting seat using json that we get from API
         """
-        pass
+        return super().__init__(
+            row=seat["row"], 
+            column=seat["column"], 
+            number=seat["number"], 
+            booked=seat["booked"], 
+            additional_data=seat["additional_data"], 
+            room_id=seat["room_id"]
+        )
 
     @property
     def room(self):

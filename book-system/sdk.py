@@ -109,7 +109,7 @@ class BookSystemSDK:
     def refresh_room(self, room: Room) -> Room:
         url = f"{self.api_url}/rooms/{room.id}"
         room = room.to_dict()
-        body = dict(name=room["title"], seats=room["seats"])
+        body = dict(name=room["name"], seats=room["seats"])
         return Room.from_json(self._refresh(url, body=body))
 
     def refresh_event(self, event: Event) -> Event:

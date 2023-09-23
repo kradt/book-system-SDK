@@ -6,11 +6,11 @@ from types import TypeModel
 class Room(TypeModel):
     def __init__(
             self, 
-            title: str | None = None, 
+            name: str | None = None, 
             schedule: list[Booking] | None = None,
             seats: list[Seat] | None = None,
             autogenerate_seats: bool = True):
-        self.title = title
+        self.name = name
         self.seats = seats
         self.schedule = schedule
         self.autogenerate_seats = autogenerate_seats
@@ -19,9 +19,9 @@ class Room(TypeModel):
     def from_json(cls, room: dict):
         """
             Getting room using json that we get from API
-            TODO: add saved = True during adding it into the database
         """
-        pass
+        seats = [Seat.from_json(seat) for seat in room["seats"]]
+        return super.__init__(name=room["name"], seats=seats)
 
     def book(self, booking: Booking):
         """
