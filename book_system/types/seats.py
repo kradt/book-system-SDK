@@ -2,6 +2,8 @@ from . import TypeModel
 
 
 class Seat(TypeModel):
+    base_path = "/seats/"
+
     def __init__(
             self,
             row: int,
@@ -55,7 +57,8 @@ class Seat(TypeModel):
         self.booked = False
         pass
 
-    def to_dict(self) -> dict:
+    @property
+    def body(self) -> dict:
         return dict(
             row=self.row,
             column=self.column, 

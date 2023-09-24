@@ -3,6 +3,7 @@ from . import TypeModel
 
 
 class Room(TypeModel):
+    base_path = "/rooms/"
     def __init__(
             self, 
             name: str | None = None, 
@@ -28,9 +29,18 @@ class Room(TypeModel):
         seats = [Seat.from_json(seat) for seat in seats] if seats else None
         return cls(name=room["name"], seats=seats)
 
-    def to_dict(self) -> dict:
+    @property
+    def body(self) -> dict:
         seats_dict = [seat.to_dict() for seat in self.seats] if self.seats else None
         return dict(
             name=self.name, 
             seats=seats_dict
+        )
+
+    @property
+    def params(self) -> dict:
+        return dict(
+            autogenerate=self.autogenerate_seats, 
+            columns=self.columns, 
+            rows=self.rows
         )

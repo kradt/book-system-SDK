@@ -6,6 +6,7 @@ from .rooms import Room
 
 
 class Booking(TypeModel):
+    base_path = "/booking/"
     def __init__(
             self, 
             event: Event,
@@ -23,7 +24,8 @@ class Booking(TypeModel):
     def from_json(cls, booking: dict):
         pass
 
-    def to_dict(self):
+    @property
+    def body(self):
         """
             It can cause error when room or event didn't save in the database
         """

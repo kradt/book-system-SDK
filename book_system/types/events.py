@@ -2,6 +2,8 @@ from . import TypeModel
 
 
 class Event(TypeModel):
+    base_path = "/events/"
+    
     def __init__(
             self,
             title: str,
@@ -21,5 +23,6 @@ class Event(TypeModel):
         """
         return cls(title=event["title"], additional_data=event["additional_data"])
 
-    def to_dict(self) -> dict:
+    @property
+    def body(self) -> dict:
         return dict(title=self.title, additional_data=self.additional_data)

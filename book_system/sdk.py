@@ -2,6 +2,7 @@ import requests
 from urllib.parse import urlencode
 from typing import Literal
 
+from .types import TypeModel
 from .types.rooms import Room
 from .types.events import Event
 from .types.booking import Booking
@@ -18,49 +19,14 @@ class BookSystemSDK:
         self._events = events
 
     def _make_request(
-            self,
-            base_url: str,
-            method: Literal["GET", "POST", "PATCH", "DELETE"] = "GET", 
+            url: str,
+            method: Literal["GET", "POST", "PATCH", "DELETE"],
             body: dict | None = None,
-            headers: dict | None = None,
-            queries: dict | None = None) -> requests.Response:
-
-        url = f"{base_url}?{urlencode(queries) if queries else ''}"
-        if method == "GET":
-            request = requests.get(url)
-        elif method == "POST":
-            request = requests.post(url, json=body, headers=headers)
-        elif method == "DELETE":
-            request = requests.delete(url, headers=headers)
-        elif method == "PATCH":
-            request = requests.patch(url, json=body, headers=headers)        
-        return request
-    
-    def _get(self, url: str) -> dict:
-        response = self._make_request(base_url=url, method="GET")
+            params: dict | None = None) -> dict:
+        response = requests.request(method=method, url=url, json=body, params=params)
         json = response.json()
-        if response.status_code != 200:
-            raise ValueError(json["detail"])
-        return json
-    
-    def _delete(self, url: str) -> None:
-        response = self._make_request(base_url=url, method="DELETE")
-        if response.status_codes != 204:
-            json = response.json()
-            raise ValueError(json["detail"])
-        
-    def _craete_(self, url: str, body: dict):
-        response = self._make_request(base_url=url, method="POST", body=body)
-        json = response.json()
-        if response.status_code != 201:
-            raise ValueError(json["detail"])
-        return json
-
-    def _refresh(self, url: str, body: dict):
-        response = self._make_request(base_url=url, method="PATCH", body=body)
-        json = response.json()
-        if response.status_code != 200:
-            raise ValueError(json["detail"])
+        if response.status_code not in [200, 201, 204]:
+            raise json["detail"]
         return json
     
     @property
@@ -77,6 +43,20 @@ class BookSystemSDK:
             self._events = [Event.from_json(event) for event in self._get(url)]
         return self._events
 
+    def create(self, obj: TypeModel | list[TypeModel]):
+        url = f"{self.api_url}{obj.base_url}"
+        if isinstance(obj, list):
+            return [o.from_json(self._create(url, body=o.body, params=o.params)) for o in obj]
+        return obj.from_json(self._create(url, body=obj.body, params=obj.params))
+    
+    def refresh(self, obj: TypeModel | list[TypeModel]):
+        obj = [obj] if not isinstance(obj, list) else obj
+        [self.refresh(f"{self.api_url}{o.base_url}{o.id}", body={key: value for key, value in o.body.items() if value}, params=o.params) for o in obj]
+
+    def delete(self, obj: TypeModel | list[TypeModel]):
+        obj = [obj] if not isinstance(obj, list) else obj
+        [self.refresh(f"{self.api_url}{o.base_url}{o.id}") for o in obj]
+
     def get_room_by_id(self, room_id) -> Room:
         url = f"{self.api_url}/rooms/{room_id}/"
         json = self._get(url)
@@ -91,51 +71,3 @@ class BookSystemSDK:
         url = f"{self.api_url}/rooms/{booking_id}/"
         json = self._get(url)
         return Booking.from_json(json)
-
-    def create_room(self, room: Room) -> Room:
-        url = f"{self.api_url}/rooms/"
-        body = room.to_dict()
-        return Room.from_json(self._craete_(url, body=body))
-
-    def create_event(self, event: Event) -> Event:
-        url = f"{self.api_url}/events/"
-        body = event.to_dict()
-        return Event.from_json(self._craete_(url, body=body))
-
-    def create_booking(self, booking: Booking) -> Booking:
-        url = f"{self.api_url}/booking/"
-        body = booking.to_dict()
-        return Booking.from_json(self._craete_(url, body=body))
-
-    def refresh_room(self, room: Room) -> Room:
-        url = f"{self.api_url}/rooms/{room.id}"
-        room = room.to_dict()
-        body = dict(name=room["name"], seats=room["seats"])
-        return Room.from_json(self._refresh(url, body=body))
-
-    def refresh_event(self, event: Event) -> Event:
-        url = f"{self.api_url}/events/{event.id}"
-        event = event.to_dict()
-        return Event.from_json(self._refresh(url, body=event))
-
-    def refresh_booking(self, booking: Booking) -> Booking:
-        url = f"{self.api_url}/booking/{booking.id}"
-        booking = booking.to_dict()
-        body = dict(
-            time_start=booking["time_start"], 
-            time_finish=booking["time_finish"],
-            additional_data=booking["additional_data"]
-        )
-        return Booking.from_json(self._refresh(url, body=body))
-
-    def delete_room_by_id(self, room_id: int) -> None:
-        url = f"{self.api_url}/rooms/{room_id}"
-        self._delete(url)
-
-    def delete_event_by_id(self, event_id: int) -> None:
-        url = f"{self.api_url}/events/{event_id}"
-        self._delete(url)
-
-    def delete_booking_by_id(self, booking_id: int) -> None:
-        url = f"{self.api_url}/booking/{booking_id}"
-        self._delete(url)

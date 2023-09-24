@@ -1,4 +1,4 @@
-from abc import ABC, abstractclassmethod, abstractmethod
+from abc import ABC, abstractclassmethod,abstractproperty
 
 
 class TypeModel(ABC):
@@ -7,6 +7,10 @@ class TypeModel(ABC):
     def from_json(object_json: dict):
         raise NotImplementedError
     
-    @abstractmethod
-    def to_dict():
+    @abstractproperty
+    def body():
+        raise NotImplementedError
+    
+    @abstractproperty
+    def params():
         raise NotImplementedError
