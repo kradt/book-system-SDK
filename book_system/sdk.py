@@ -43,19 +43,17 @@ class BookSystemSDK:
             self._events = [Event.from_json(event) for event in self._get(url)]
         return self._events
 
-    def create(self, obj: TypeModel | list[TypeModel]):
+    def create(self, obj: TypeModel):
         url = f"{self.api_url}{obj.base_url}"
-        if isinstance(obj, list):
-            return [o.from_json(self._create(url, body=o.body, params=o.params)) for o in obj]
-        return obj.from_json(self._create(url, body=obj.body, params=obj.params))
+        return obj.from_json(self._make_request(url, method="POST", body=obj.body, params=obj.params))
     
-    def refresh(self, obj: TypeModel | list[TypeModel]):
-        obj = [obj] if not isinstance(obj, list) else obj
-        [self.refresh(f"{self.api_url}{o.base_url}{o.id}", body={key: value for key, value in o.body.items() if value}, params=o.params) for o in obj]
+    def refresh(self, obj: TypeModel):
+        url = f"{self.api_url}{obj.base_url}{obj.id}"
+        return self._make_request(url=url, method="PATCH", body=obj.body, params=obj.params)
 
     def delete(self, obj: TypeModel | list[TypeModel]):
-        obj = [obj] if not isinstance(obj, list) else obj
-        [self.refresh(f"{self.api_url}{o.base_url}{o.id}") for o in obj]
+        url = f"{self.api_url}{obj.base_url}{obj.id}"
+        self._make_request(url=url, method="DELETE")
 
     def get_room_by_id(self, room_id) -> Room:
         url = f"{self.api_url}/rooms/{room_id}/"
