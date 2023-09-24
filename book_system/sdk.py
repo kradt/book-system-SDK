@@ -17,17 +17,6 @@ class BookSystemSDK:
         self.api_url = api_url
         self._rooms = rooms
         self._events = events
-
-    def _make_request(
-            url: str,
-            method: Literal["GET", "POST", "PATCH", "DELETE"],
-            body: dict | None = None,
-            params: dict | None = None) -> dict:
-        response = requests.request(method=method, url=url, json=body, params=params)
-        json = response.json()
-        if response.status_code not in [200, 201, 204]:
-            raise json["detail"]
-        return json
     
     @property
     def rooms(self) -> list[Room]:
@@ -43,29 +32,30 @@ class BookSystemSDK:
             self._events = [Event.from_json(event) for event in self._get(url)]
         return self._events
 
-    def create(self, obj: TypeModel):
+    def _make_request(
+            url: str,
+            method: Literal["GET", "POST", "PATCH", "DELETE"],
+            body: dict | None = None,
+            params: dict | None = None) -> dict:
+        response = requests.request(method=method, url=url, json=body, params=params)
+        json = response.json()
+        if response.status_code not in [200, 201, 204]:
+            raise json["detail"]
+        return json
+    
+    def create(self, obj: TypeModel) -> TypeModel:
         url = f"{self.api_url}{obj.base_url}"
         return obj.from_json(self._make_request(url, method="POST", body=obj.body, params=obj.params))
     
-    def refresh(self, obj: TypeModel):
+    def refresh(self, obj: TypeModel) -> TypeModel:
         url = f"{self.api_url}{obj.base_url}{obj.id}"
-        return self._make_request(url=url, method="PATCH", body=obj.body, params=obj.params)
+        return obj.from_json(self._make_request(url=url, method="PATCH", body=obj.body, params=obj.params))
 
     def delete(self, obj: TypeModel | list[TypeModel]):
         url = f"{self.api_url}{obj.base_url}{obj.id}"
         self._make_request(url=url, method="DELETE")
 
-    def get_room_by_id(self, room_id) -> Room:
-        url = f"{self.api_url}/rooms/{room_id}/"
-        json = self._get(url)
-        return Room.from_json(json)
-
-    def get_event_by_id(self, event_id) -> Event:
-        url = f"{self.api_url}/events/{event_id}/"
-        json = self._get(url)
-        return Event.from_json(json)
-
-    def get_booking_by_id(self, booking_id) -> Booking:
-        url = f"{self.api_url}/rooms/{booking_id}/"
-        json = self._get(url)
-        return Booking.from_json(json)
+    def get_by_id(self, model, id) -> TypeModel:
+        url = f"{self.api_url}{model.base_url}{id}"
+        json = self._make_request(url, method="GET")
+        return model.from_json(json)
