@@ -26,3 +26,7 @@ class Event(TypeModel):
     @property
     def body(self) -> dict:
         return dict(title=self.title, additional_data=self.additional_data)
+
+    @property
+    def params(self) -> dict:
+        return {}

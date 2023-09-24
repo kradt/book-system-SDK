@@ -10,28 +10,25 @@ class Seat(TypeModel):
             column: int,
             number: int,
             booked: bool = False,
-            additional_data: dict | None = None,
-            room_id: int | None = None):
+            additional_data: dict | None = None):
 
         self.row = row
         self.column = column
         self.number = number
         self.booked = booked
         self.additional_data = additional_data
-        self.room_id = room_id
 
     @classmethod
     def from_json(cls, seat: dict):
         """
             Getting seat using json that we get from API
         """
-        return super().__init__(
+        return cls(
             row=seat["row"], 
             column=seat["column"], 
             number=seat["number"], 
             booked=seat["booked"], 
-            additional_data=seat["additional_data"], 
-            room_id=seat["room_id"]
+            additional_data=seat["additional_data"]
         )
 
     @property
@@ -64,6 +61,9 @@ class Seat(TypeModel):
             column=self.column, 
             number=self.number, 
             booked=self.booked, 
-            additional_data=self.additional_data, 
-            room_id=self.sroom_id
+            additional_data=self.additional_data
         )
+
+    @property
+    def params(self) -> dict:
+        return {}
