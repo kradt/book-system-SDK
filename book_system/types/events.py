@@ -7,8 +7,9 @@ class Event(TypeModel):
     def __init__(
             self,
             title: str,
+            id: int | None = None,
             additional_data: dict | None = None):
-    
+        self.id = id
         self.title = title
         self.additional_data = additional_data
 
@@ -21,7 +22,7 @@ class Event(TypeModel):
                 "additional_data": "dict"
             }
         """
-        return cls(title=event["title"], additional_data=event["additional_data"])
+        return cls(id=event["id"], title=event["title"], additional_data=event["additional_data"])
 
     @property
     def body(self) -> dict:
