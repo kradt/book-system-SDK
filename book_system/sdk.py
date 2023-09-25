@@ -64,7 +64,9 @@ class BookSystemSDK:
         url = f"{self.api_url}{obj.base_path}{obj.id}"
         self._make_request(url=url, method="DELETE")
 
-    def get_by_id(self, model, id) -> TypeModel:
-        url = f"{self.api_url}{model.base_path}{id}"
-        json = self._make_request(url=url, method="GET")
+    def get(self, model, id: int | None = None, name: str | None = None) -> TypeModel:
+        if not name and not id:
+            raise ValueError("You should pass name or id to find object")
+        url = f"{self.api_url}{model.base_path}"
+        json = self._make_request(url=url, method="GET", params={"id": id, "name": name})
         return model.from_json(json)
