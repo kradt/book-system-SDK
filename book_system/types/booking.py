@@ -31,7 +31,12 @@ class Booking(TypeModel):
 
     @classmethod
     def from_json(cls, booking: dict):
-        return cls(event_id=booking["event_id"], room_id=booking["room_id"], time_start=booking["time_start"], time_finish=booking["time_finish"], additional_data=booking["additional_data"])
+        return cls(
+            event_id=booking["event_id"], 
+            room_id=booking["room_id"], 
+            time_start=booking["time_start"], 
+            time_finish=datetime.datetime.fromisoformat(booking["time_finish"]),
+            additional_data=datetime.datetime.fromisoformat(booking["additional_data"]))
 
     @property
     def body(self):
@@ -39,8 +44,8 @@ class Booking(TypeModel):
             It can cause error when room or event didn't save in the database
         """
         return dict(
-            time_start=self.time_start,
-            time_finish=self.time_finish, 
+            time_start=self.time_start.isoformat(),
+            time_finish=self.time_finish.isoformat(), 
             additional_data=self.additional_data,
             room_id=self.room.id,
             event_id=self.event.id)
