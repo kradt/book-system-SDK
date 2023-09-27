@@ -34,9 +34,9 @@ class Booking(TypeModel):
         return cls(
             event_id=booking["event_id"], 
             room_id=booking["room_id"], 
-            time_start=booking["time_start"], 
+            time_start=datetime.datetime.fromisoformat(booking["time_start"]), 
             time_finish=datetime.datetime.fromisoformat(booking["time_finish"]),
-            additional_data=datetime.datetime.fromisoformat(booking["additional_data"]))
+            additional_data=booking["additional_data"])
 
     @property
     def body(self):
