@@ -12,9 +12,21 @@ class Room(TypeModel):
             autogenerate_seats: bool = False, 
             columns: int | None = None,
             rows: int | None = None):
+        """
+            Initialize a Room object.
+
+            :param id: The ID of the room (optional).
+            :param name: The name of the room (optional).
+            :param seats: A list of Seat objects associated with the room (optional).
+            :param autogenerate_seats: Whether to automatically generate seats (default is False).
+            :param columns: The number of columns for seat generation (optional).
+            :param rows: The number of rows for seat generation (optional).
+
+            :raises ValueError: If autogenerate_seats is True but columns or rows are not provided.
+        """
         
         if autogenerate_seats and (not columns or not rows):
-            raise ValueError("If u wanna use autogenerate you should pass number of columns and rows")
+            raise ValueError("If you want to use autogenerate you should pass the number of columns and rows")
         self.id = id
         self.name = name
         self.columns = columns
@@ -25,7 +37,11 @@ class Room(TypeModel):
     @classmethod
     def from_json(cls, room: dict):
         """
-            Getting room using json that we get from API
+            Create a Room object from a JSON dictionary obtained from the API.
+
+            :param room: JSON dictionary representing a room.
+
+            :return: A Room object.
         """
         seats = room.get("seats")
         seats = [Seat.from_json({**seat}) for seat in seats] if seats else None
@@ -33,6 +49,11 @@ class Room(TypeModel):
 
     @property
     def body(self) -> dict:
+        """
+            Get the data of the Room object in a dictionary format for API requests.
+
+            :return: Dictionary representation of the Room object.
+        """
         seats_dict = [seat.body for seat in self.seats] if self.seats else None
         return dict(
             name=self.name, 
@@ -41,6 +62,11 @@ class Room(TypeModel):
 
     @property
     def params(self) -> dict:
+        """
+            Get query parameters for API requests.
+
+            :return: Dictionary with autogenerate, columns, and rows parameters.
+        """
         return dict(
             autogenerate=self.autogenerate_seats, 
             columns=self.columns, 

@@ -10,8 +10,19 @@ class Seat(TypeModel):
             column: int,
             number: int,
             booked: bool = False,
+            id: int | None = None,
             additional_data: dict | None = None):
+        """
+            Initialize a Seat object.
 
+            :param row: The row number of the seat.
+            :param column: The column number of the seat.
+            :param number: The seat number.
+            :param booked: Whether the seat is booked (default is False).
+            :param id: The ID of the seat (optional).
+            :param additional_data: Additional data related to the seat (optional).
+        """
+        self.id = id
         self.row = row
         self.column = column
         self.number = number
@@ -21,9 +32,14 @@ class Seat(TypeModel):
     @classmethod
     def from_json(cls, seat: dict):
         """
-            Getting seat using json that we get from API
+            Create a Seat object from a JSON dictionary obtained from the API.
+
+            :param seat: JSON dictionary representing a seat.
+
+            :return: A Seat object.
         """
         return cls(
+            id=seat["id"],
             row=seat["row"], 
             column=seat["column"], 
             number=seat["number"], 
@@ -32,30 +48,12 @@ class Seat(TypeModel):
         )
 
     @property
-    def room(self):
-        """
-            TODO: Getting room by it id in the database and return it
-        """
-        pass
-
-    def book(self):
-        """
-            TODO: booking seat in the database
-        """
-        if self.booked:
-            raise ValueError("The seat have already booked")
-        self.booked = True
-        pass
-
-    def unbook(self, strict: bool = False):
-        """
-            TODO: unbooking seat in the database
-        """
-        self.booked = False
-        pass
-
-    @property
     def body(self) -> dict:
+        """
+            Get the data of the Seat object in a dictionary format for API requests.
+
+            :return: Dictionary representation of the Seat object.
+        """
         return dict(
             row=self.row,
             column=self.column, 
@@ -66,4 +64,9 @@ class Seat(TypeModel):
 
     @property
     def params(self) -> dict:
+        """
+            Get query parameters for API requests (currently empty).
+
+            :return: An empty dictionary.
+        """
         return {}

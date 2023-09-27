@@ -8,7 +8,7 @@ def get_readme():
 
 setup(
   name='book-system-SDK',
-  version='0.1.1',
+  version='0.1.4',
   author='Artem Sydorenko',
   author_email='kradworkmail@gmail.com',
   description='SDK for interaction with the book-system API',
