@@ -53,6 +53,7 @@ class Booking(TypeModel):
             :return: A Booking object.
         """
         return cls(
+            id=booking["id"],
             event_id=booking["event_id"], 
             room_id=booking["room_id"], 
             time_start=datetime.datetime.fromisoformat(booking["time_start"]), 
@@ -72,8 +73,8 @@ class Booking(TypeModel):
             time_start=self.time_start.isoformat(),
             time_finish=self.time_finish.isoformat(), 
             additional_data=self.additional_data,
-            room_id=self.room.id,
-            event_id=self.event.id)
+            room_id=self.room.id if self.room else self.room_id,
+            event_id=self.event.id if self.event else self.event_id)
 
     @property
     def params(self) -> dict:

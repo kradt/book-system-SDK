@@ -80,7 +80,7 @@ class BookSystemSDK:
             :return: The JSON response from the API.
         """
         response = requests.request(method=method, url=url, json=body, params=params)
-        json = response.json()
+        json = response.json() if response.status_code != 204 else None
         if response.status_code not in [200, 201, 204]:
             raise ValueError(json["detail"])
         return json
@@ -104,8 +104,8 @@ class BookSystemSDK:
 
             :return: The refreshed object.
         """
-        url = f"{self.api_url}{obj.base_path}{obj.id}"
-        return obj.from_json(self._make_request(url=url, method="PATCH", body=obj.body, params=obj.params))
+        url = f"{self.api_url}{obj.base_path}{obj.id}/"
+        return obj.from_json(self._make_request(url=url, method="PATCH", body=obj.body))
 
     def delete(self, obj: TypeModel | list[TypeModel]) -> None:
         """
