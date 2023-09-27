@@ -11,6 +11,14 @@ The Book-System SDK is a powerful tool designed to simplify the integration of t
 
 - Seat Booking: Simplify the seat booking process by using the SDK's intuitive methods. Your users can enjoy a hassle-free experience when reserving seats for their chosen events.
 
+## Installation
+
+You can install SDK using pip:
+
+```
+pip install book-system-sdk
+```
+
 ## Examples
 
 ### Example 1: Creating a Room and Fetching Room Details
