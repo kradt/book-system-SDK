@@ -6,7 +6,7 @@ from book_system import BookSystemSDK
 
 @pytest.fixture(scope="function")
 def room(sdk):
-    room = Room(name="Test Room")
+    room = Room(name="Test Room", autogenerate_seats=True, columns=2, rows=2)
     yield room
 
 
@@ -37,7 +37,6 @@ def created_event(sdk, event):
 
 @pytest.fixture
 def booking(sdk, created_event, created_room):
-    print("ID", created_event.id)
     book = Booking(time_start=datetime.datetime.now(), time_finish=datetime.datetime.now(), event=created_event, room=created_room)
     yield book
 

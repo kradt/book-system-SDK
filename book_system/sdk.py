@@ -127,7 +127,9 @@ class BookSystemSDK:
 
             :return: The retrieved object or None if not found.
         """
-        if by and by_id:
+        if not by and by_id:
+            url = f"{self.api_url}{model.base_path}{by_id}/"
+        elif by and by_id:
             url = f"{self.api_url}{by.base_path}{by_id}{model.base_path}"
         else:
             url = f"{self.api_url}{model.base_path}"
