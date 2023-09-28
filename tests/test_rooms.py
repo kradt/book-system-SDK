@@ -9,10 +9,22 @@ def test_create_room(room, sdk):
     sdk.delete(created_room)
 
 
+def test_from_json(room, sdk):
+    with pytest.raises(KeyError) as exs:
+        r = Room.from_json(room.body)
+    assert str(exs.value) == "'id'"
+
+    room_dict = {**room.body, "id": -423423423}
+    r = Room.from_json(room_dict)
+    assert room_dict["id"] == r.id
+    assert room.body == r.body
+
+
 def test_create_room_without_columns_and_rows(sdk, room):
     with pytest.raises(ValueError) as exs:
         room = Room(name="Test One Names", autogenerate_seats=True)
     assert str(exs.value) == "If you want to use autogenerate you should pass the number of columns and rows"
+
 
 # Test fetching a room
 def test_fetch_room(created_room, sdk):
