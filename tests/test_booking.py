@@ -10,6 +10,7 @@ def test_create_booking(booking, sdk):
     sdk.delete(created_booking)
 
 
+# Test creating a booking withoit event and room
 def test_create_booking_without_event_and_room(sdk, room):
     with pytest.raises(ValueError) as exs:
         booking = Booking(time_start=datetime.datetime.now(), time_finish=datetime.datetime.now())
@@ -80,4 +81,3 @@ def test_list_bookings(created_booking, sdk):
 
 def test_property_getting_all_bookings_from_sdk(sdk, created_booking):
     assert sdk.booking[0].id == created_booking.id
-    

@@ -1,6 +1,6 @@
 import pytest
 import datetime
-from book_system import Room, Event, Booking, Seat
+from book_system import Room, Event, Booking
 from book_system import BookSystemSDK
 
 
@@ -38,7 +38,10 @@ def created_event(sdk, event):
 
 @pytest.fixture
 def booking(sdk, created_event, created_room):
-    book = Booking(time_start=datetime.datetime.now(), time_finish=datetime.datetime.now(), event=created_event, room=created_room)
+    book = Booking(time_start=datetime.datetime.now(), 
+                   time_finish=datetime.datetime.now(),
+                   event=created_event,
+                   room=created_room)
     yield book
 
 
