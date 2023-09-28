@@ -9,6 +9,11 @@ def test_create_room(room, sdk):
     sdk.delete(created_room)
 
 
+def test_create_room_without_columns_and_rows(sdk, room):
+    with pytest.raises(ValueError) as exs:
+        room = Room(name="Test One Names", autogenerate_seats=True)
+    assert str(exs.value) == "If you want to use autogenerate you should pass the number of columns and rows"
+
 # Test fetching a room
 def test_fetch_room(created_room, sdk):
     fetched_room = sdk.get(model=Room)

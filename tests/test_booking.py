@@ -9,10 +9,18 @@ def test_create_booking(booking, sdk):
     assert created_booking.id
     sdk.delete(created_booking)
 
+
+def test_create_booking_without_event_and_room(sdk, room):
+    with pytest.raises(ValueError) as exs:
+        booking = Booking(time_start=datetime.datetime.now(), time_finish=datetime.datetime.now())
+    assert str(exs.value) == "You should pass event and room instances or their IDs"
+
+
 # Test fetching a booking
 def test_fetch_booking(created_booking, sdk):
     fetched_booking = sdk.get(model=Booking)
     assert int(fetched_booking.id) == int(created_booking.id)
+
 
 # Test updating a booking
 def test_update_booking(created_booking, sdk):
@@ -21,11 +29,13 @@ def test_update_booking(created_booking, sdk):
     updated_booking = sdk.refresh(created_booking)
     assert updated_booking.time_start.hour == now.hour
 
+
 # Test deleting a booking
 def test_delete_booking(created_booking, sdk):
     sdk.delete(created_booking)
     deleted_booking = sdk.get(model=Booking)
     assert not deleted_booking
+
 
 # Test listing all bookings
 def test_list_bookings(created_booking, sdk):
@@ -67,4 +77,7 @@ def test_list_bookings(created_booking, sdk):
     sdk.delete(room1)
     sdk.delete(room2)
 
-# Add more test cases as needed for other Booking actions
+
+def test_property_getting_all_bookings_from_sdk(sdk, created_booking):
+    assert sdk.booking[0].id == created_booking.id
+    

@@ -21,3 +21,17 @@ def test_update_seat_by_id(sdk, created_room):
     refreshed_seat = sdk.refresh(seat)
     assert refreshed_seat
     assert refreshed_seat.booked != False
+
+
+def test_create_room_with_seats(sdk):
+    seat1 = Seat(row=1, column=1, number=1, booked=False, additional_data={"price": 2000})
+    seat2 = Seat(row=1, column=2, number=2, booked=False, additional_data={"price": 5000})
+    room = Room(name="NewRoom", seats=[seat1, seat2])
+    room = sdk.create(room)
+    assert room.seats[1].id
+    assert len(sdk.rooms) == 1
+    assert len(room.seats) == 2
+    assert room.seats[0].number == seat1.number
+    assert room.seats[0].body == seat1.body
+    assert room.seats[0].params == seat1.params
+    sdk.delete(room)

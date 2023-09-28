@@ -5,6 +5,7 @@ from book_system import Event
 def test_create_event(event, sdk):
     created_event = sdk.create(event)
     assert created_event.id is not None
+    assert created_event.params == {}
     sdk.delete(created_event)
 
 # Test fetching an event

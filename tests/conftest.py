@@ -35,6 +35,7 @@ def created_event(sdk, event):
     except ValueError:
         pass
 
+
 @pytest.fixture
 def booking(sdk, created_event, created_room):
     book = Booking(time_start=datetime.datetime.now(), time_finish=datetime.datetime.now(), event=created_event, room=created_room)

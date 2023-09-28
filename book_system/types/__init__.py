@@ -1,4 +1,4 @@
-from abc import ABC, abstractclassmethod,abstractproperty
+from abc import ABC, abstractclassmethod, abstractproperty
 
 
 class TypeModel(ABC):
