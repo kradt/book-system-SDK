@@ -13,3 +13,11 @@ def test_getting_seat_by_number(sdk, created_room):
     seat_from_base = sdk.get(Seat, by=Room, by_id=created_room.id, number=seat.number)
     assert seat_from_base
     assert seat_from_base.id == seat.id
+
+
+def test_update_seat_by_id(sdk, created_room):
+    seat = created_room.seats[0]
+    seat.booked = True
+    refreshed_seat = sdk.refresh(seat)
+    assert refreshed_seat
+    assert refreshed_seat.booked != False
