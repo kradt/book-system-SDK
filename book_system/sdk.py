@@ -8,24 +8,13 @@ from .types.booking import Booking
 
 
 class BookSystemSDK:
-    def __init__(
-            self,
-            api_url: str,
-            rooms: list[Room] | None = None,
-            events: list[Event] | None = None,
-            booking: list[Booking] | None = None):
+    def __init__(self, api_url: str):
         """
             Initialize the BookSystemSDK.
 
             :param api_url: The base URL for the API.
-            :param rooms: A list of Room objects (optional).
-            :param events: A list of Event objects (optional).
-            :param booking: A list of Booking objects (optional).
         """
         self.api_url = api_url
-        self._rooms = rooms
-        self._events = events
-        self._booking = booking
     
     @property
     def rooms(self) -> list[Room]:
@@ -34,10 +23,8 @@ class BookSystemSDK:
 
             :return: A list of Room objects.
         """
-        if not self._rooms:
-            url = f"{self.api_url}/rooms/"
-            self._rooms = [Room.from_json(room) for room in self._make_request(url=url, method="GET")]
-        return self._rooms
+        url = f"{self.api_url}/rooms/"
+        return [Room.from_json(room) for room in self._make_request(url=url, method="GET")]
 
     @property
     def events(self) -> list[Event]:
@@ -46,10 +33,8 @@ class BookSystemSDK:
 
             :return: A list of Event objects.
         """
-        if not self._events:
-            url = f"{self.api_url}/events/"
-            self._events = [Event.from_json(event) for event in self._make_request(url=url, method="GET")]
-        return self._events
+        url = f"{self.api_url}/events/"
+        return [Event.from_json(event) for event in self._make_request(url=url, method="GET")]
     
     @property
     def booking(self) -> list[Booking]:
@@ -58,10 +43,8 @@ class BookSystemSDK:
 
             :return: A list of Booking objects.
         """
-        if not self._booking:
-            url = f"{self.api_url}/booking/"
-            self._booking = [Booking.from_json(booking) for booking in self._make_request(url=url, method="GET")]
-        return self._booking
+        url = f"{self.api_url}/booking/"
+        return [Booking.from_json(booking) for booking in self._make_request(url=url, method="GET")]
 
     def _make_request(
             self,
