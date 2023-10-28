@@ -70,8 +70,8 @@ class Booking(TypeModel):
             :return: Dictionary representation of the Booking object.
         """
         return dict(
-            time_start=self.time_start.isoformat(),
-            time_finish=self.time_finish.isoformat(), 
+            time_start=self.time_start.isoformat() if self.time_start else None,
+            time_finish=self.time_finish.isoformat() if self.time_finish else None, 
             additional_data=self.additional_data,
             room_id=self.room.id if self.room else self.room_id,
             event_id=self.event.id if self.event else self.event_id)
